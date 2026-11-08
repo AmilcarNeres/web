@@ -1,45 +1,132 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Site</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cajueiro — Marketplace de produtos locais</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
-<div class="container">
-<div class="card">
-    <img src="images.jpg" alt="Imagem exemplo" width="9" height="10">
-    <div class="card-content">
-      <h3>Eletronica </h3>
-      <p>Em um mundo tecnologico, conhecimento em eletronica é base fundamental para um tecnico .Ramo muito promissor rentavel para um nicho de mercado evolutivo.</p>
-      <a href="#" class="btn">Saiba mais</a>
+<header>
+  <div class="wrap bar">
+    <div class="logo">cajueiro<i></i></div>
+    <label class="search"><span>🔍</span><input id="q" type="search" placeholder="Busque por produto ou vendedor" aria-label="Buscar"></label>
+    <button class="cart-btn" id="openCart" aria-label="Abrir carrinho">Carrinho <b id="cartCount">0</b></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-main">
+      <div>
+        <h1>Direto de quem faz, perto de você.</h1>
+        <p>Artesanato, comida e moda de pequenos produtores do Nordeste, com entrega rápida e pagamento por Pix.</p>
+      </div>
+      <button class="cta" onclick="document.getElementById('lista').scrollIntoView({behavior:'smooth'})">Ver produtos</button>
+      <div class="big" aria-hidden="true">🥭</div>
     </div>
+    <div class="hero-side">
+      <div class="tile a"><h3>Frete grátis acima de R$ 150</h3><span>Em todo o Rio Grande do Norte</span></div>
+      <div class="tile b"><h3>10% off no primeiro Pix</h3><span>Use o cupom BEMVINDO</span></div>
+    </div>
+  </section>
+
+  <section id="lista">
+    <div class="filters" id="chips"></div>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="Carrinho">
+  <header><h2>Seu carrinho</h2><button id="closeCart" aria-label="Fechar">✕</button></header>
+  <div class="items" id="items"></div>
+  <div class="total">
+    <div class="line"><span>Total</span><span id="total">R$ 0,00</span></div>
+    <button class="cta" id="checkout">Finalizar compra</button>
   </div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
 
-<div class="card"> <a href="a010d97c5a551c1"><img src="a010d97c5a551c1e862b7ff69f294d7a.gif" alt="Imagem exemplo"></a>
-    <div class="card-content">
-      <h3>Desenvolvimento</h3>
-      <p>O mundo estar cada vez mais conectado, seja por computadores, celulares, DTV  mais conhecida no Brasil por TV3.0 . Evolucao aceleradas das tecnologias será inevitavel novas solucoes para problemas inerente as novas tecnologias. </p>
-      <a href="#" class="btn">Saiba mais</a>
-		
-   
-  </div>
-</div>
-	<div class="card"><img src="images (1).jpg" width="397" height="397" alt=""/>
-		<div class="card-content">
-		 
-		
-		 <h3>IA - Revolucao Tech</h3>
-		<p>A IA veio para ficar e quem ficar sem conhecimento sobre ela, estará fadado ao fracasso, muitas profissoes serao afetadas diretamente ou indiretamente. Por este motivo é obrigacao ter conhecimentos nessa tecnologia e sua realcao com a sociedade moderna. </p>
-			<a href="#" class="btn">Saiba mais</a>
-																					 </div>
-	
+<script>
+const products=[
+ {id:1,n:"Bolsa de palha de carnaúba",s:"Ateliê Maré",c:"Moda",p:189,o:239,r:4.9,e:"👜",bg:"#FFE3B3",t:"Mais vendido"},
+ {id:2,n:"Castanha de caju torrada 500g",s:"Sítio Cajueiro",c:"Comida",p:34,r:4.8,e:"🥜",bg:"#F7D9C4"},
+ {id:3,n:"Rede de dormir tecida à mão",s:"Teares do Seridó",c:"Casa",p:310,o:360,r:5,e:"🛏️",bg:"#CDE9EE",t:"-14%"},
+ {id:4,n:"Cerâmica esmaltada azul",s:"Barro & Mar",c:"Casa",p:92,r:4.7,e:"🏺",bg:"#CFE3FF"},
+ {id:5,n:"Doce de leite artesanal",s:"Fazenda Boa Vista",c:"Comida",p:27,r:4.9,e:"🍯",bg:"#FFEBB0"},
+ {id:6,n:"Camisa de linho estampada",s:"Ateliê Maré",c:"Moda",p:158,r:4.6,e:"👕",bg:"#FFD6CF"},
+ {id:7,n:"Sandália de couro curtido",s:"Couro do Sertão",c:"Moda",p:210,o:260,r:4.8,e:"🩴",bg:"#EAD9C8",t:"-19%"},
+ {id:8,n:"Café especial torrado 250g",s:"Serra Verde",c:"Comida",p:42,r:4.9,e:"☕",bg:"#E6D5C8",t:"Novo"},
+ {id:9,n:"Luminária de fibra natural",s:"Teares do Seridó",c:"Casa",p:140,r:4.7,e:"💡",bg:"#FFF1B8"},
+ {id:10,n:"Sabonete de coco e capim-santo",s:"Ervas do Litoral",c:"Beleza",p:19,r:4.8,e:"🧼",bg:"#D5F0DD"},
+ {id:11,n:"Óleo de coco extravirgem",s:"Ervas do Litoral",c:"Beleza",p:36,r:4.9,e:"🥥",bg:"#E4EEF0"},
+ {id:12,n:"Fuxico decorativo (kit 3)",s:"Linha & Retalho",c:"Casa",p:58,r:4.5,e:"🧵",bg:"#FFD9E8"}
+];
+const money=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const $=id=>document.getElementById(id);
+const state={cat:"Todos",q:"",sort:"rel",cart:{},favs:new Set()};
+const cats=["Todos",...new Set(products.map(p=>p.c))];
 
-<div class="line"></div>
+function renderChips(){
+  $("chips").innerHTML=cats.map(c=>`<button class="chip" aria-pressed="${c===state.cat}" data-c="${c}">${c}</button>`).join("")+
+  `<select id="sort" aria-label="Ordenar"><option value="rel">Relevância</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option><option value="rate">Melhor avaliados</option></select>`;
+  $("sort").value=state.sort;
+}
+function renderGrid(){
+  let list=products.filter(p=>(state.cat==="Todos"||p.c===state.cat)&&(p.n+p.s).toLowerCase().includes(state.q));
+  if(state.sort==="asc")list.sort((a,b)=>a.p-b.p);
+  if(state.sort==="desc")list.sort((a,b)=>b.p-a.p);
+  if(state.sort==="rate")list.sort((a,b)=>b.r-a.r);
+  $("count").textContent=`${list.length} produto${list.length===1?"":"s"}`;
+  $("grid").innerHTML=list.length?list.map(p=>`
+   <article class="card">
+    <div class="thumb" style="background:${p.bg}">${p.e}
+      ${p.t?`<span class="tag">${p.t}</span>`:""}
+      <button class="fav" data-fav="${p.id}" aria-label="Favoritar ${p.n}" aria-pressed="${state.favs.has(p.id)}">${state.favs.has(p.id)?"❤️":"🤍"}</button>
+    </div>
+    <div class="info">
+      <h4>${p.n}</h4><span class="seller">${p.s}</span><span class="rate">⭐ ${p.r.toFixed(1)}</span>
+      <div class="buy"><div class="price">${p.o?`<s>${money(p.o)}</s>`:""}${money(p.p)}</div>
+      <button class="add" data-add="${p.id}">Adicionar</button></div>
+    </div>
+   </article>`).join(""):`<div class="empty">Nenhum produto encontrado. Tente outra busca ou categoria.</div>`;
+}
+function renderCart(){
+  const ids=Object.keys(state.cart);
+  let total=0,n=0;
+  $("items").innerHTML=ids.length?ids.map(id=>{
+    const p=products.find(x=>x.id==id),q=state.cart[id];total+=p.p*q;n+=q;
+    return `<div class="row"><div class="mini" style="background:${p.bg}">${p.e}</div>
+      <div><strong>${p.n}</strong><div class="seller">${money(p.p)}</div></div>
+      <div class="qty"><button data-dec="${id}" aria-label="Diminuir">−</button><span>${q}</span><button data-inc="${id}" aria-label="Aumentar">+</button></div></div>`;
+  }).join(""):`<p class="empty">Seu carrinho está vazio. Adicione um produto para começar.</p>`;
+  $("total").textContent=money(total);$("cartCount").textContent=n;
+}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),1800)}
+const setCart=(id,d)=>{state.cart[id]=(state.cart[id]||0)+d;if(state.cart[id]<=0)delete state.cart[id];renderCart()};
 
-<p>Veja mais em <a href="#">meus links</a>.</p>
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.c){state.cat=t.dataset.c;renderChips();renderGrid()}
+  if(t.dataset.add){setCart(+t.dataset.add,1);toast("Adicionado ao carrinho")}
+  if(t.dataset.inc)setCart(+t.dataset.inc,1);
+  if(t.dataset.dec)setCart(+t.dataset.dec,-1);
+  if(t.dataset.fav){const id=+t.dataset.fav;state.favs.has(id)?state.favs.delete(id):state.favs.add(id);renderGrid()}
+  if(t.id==="checkout")toast(Object.keys(state.cart).length?"Pedido enviado! Pague com Pix.":"Adicione itens antes de finalizar");
+});
+document.addEventListener("change",e=>{if(e.target.id==="sort"){state.sort=e.target.value;renderGrid()}});
+$("q").addEventListener("input",e=>{state.q=e.target.value.toLowerCase();renderGrid()});
+const toggle=o=>document.body.classList.toggle("open",o);
+$("openCart").onclick=()=>toggle(true);$("closeCart").onclick=()=>toggle(false);$("scrim").onclick=()=>toggle(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")toggle(false)});
 
+renderChips();renderGrid();renderCart();
+</script>
 </body>
 </html>
